@@ -132,7 +132,7 @@ output "eDP-2" {
 // https://yalter.github.io/niri/Configuration:-Layout
 layout {
    // Set gaps around windows in logical pixels.
-    gaps 2
+    gaps 3
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -175,26 +175,13 @@ layout {
 
     // You can change how the focus ring looks.
     focus-ring {
-        // Uncomment this line to disable the focus ring.
+
         // off
-
-        // How many logical pixels the ring extends out from the windows.
-        width 2
-
-        // Colors can be set in a variety of ways:
-        // - CSS named colors: "red"
-        // - RGB hex: "#rgb", "#rgba", "#rrggbb", "#rrggbbaa"
-        // - CSS-like notation: "rgb(255, 127, 0)", rgba(), hsl() and a few others.
-
-        // Color of the ring on the active monitor.
+        width 3
         active-color "#ffffff99"
 
-        // Color of the ring on inactive monitors.
-        //
-        // The focus ring only draws around the active window, so the only place
-        // where you can see its inactive-color is on other monitors.
-        inactive-color "#505050"
-
+	inactive-color "#505050"
+	
         // You can also use gradients. They take precedence over solid colors.
         // Gradients are rendered the same as CSS linear-gradient(angle, from, to).
         // The angle is the same as in linear-gradient, and is optional,
@@ -202,20 +189,20 @@ layout {
         // You can use any CSS linear-gradient tool on the web to set these up.
         // Changing the color space is also supported, check the wiki for more info.
         //
-        // active-gradient from="#80c8ff" to="#c7ff7f" angle=45
+	//active-gradient from="#80c8ff" to="#c7ff7f" angle=45
 
         // You can also color the gradient relative to the entire view
         // of the workspace, rather than relative to just the window itself.
         // To do that, set relative-to="workspace-view".
         //
-        // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
+        //inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
     }
 
     // You can also add a border. It's similar to the focus ring, but always visible.
     border {
         // The settings are the same as for the focus ring.
         // If you enable the border, you probably want to disable the focus ring.
-        off
+	off
 
         width 4
         active-color "#ffc87f"
@@ -235,7 +222,7 @@ layout {
     // You can enable drop shadows for windows.
     shadow {
         // Uncomment the next line to enable shadows.
-        // on
+         on
 
         // By default, the shadow draws only around its window, and not behind it.
         // Uncomment this setting to make the shadow draw behind its window.
@@ -290,15 +277,12 @@ layout {
 // This line starts waybar, a commonly used bar for Wayland compositors.
 
 spawn-at-startup "bluez-daemon"
-spawn-at-startup "vicinae" "server"
 spawn-at-startup "fcitx5"
 spawn-at-startup "gammastep" "-l" "22.54:114.06"
-spawn-at-startup "qs" "-c" "noctalia-shell"
-spawn-at-startup "~/.config/niri/scripts/swayidle.sh"
+//spawn-at-startup "qs" "-c" "noctalia-shell"
+spawn-at-startup "dms" "run"
 spawn-at-startup "/usr/lib/polkit-kde-authentication-agent-1"
-//spawn-at-startup "emacs" "--daemon"
-spawn-at-startup "emacsclient" "-c" "~/Documents/My_files/todo.org"
-spawn-at-startup "emacsclient" "-c" "~/Documents/My_files/日日新.org"
+spawn-at-startup "emacs" "--daemon"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
@@ -348,17 +332,6 @@ default-column-width {proportion 0.66667;}
 }
 
 window-rule{
-match app-id="org.kde.konsole"
-//open-floating true
-opacity 0.85
-draw-border-with-background false
-background-effect{
-blur true
-}
-}
-
-
-window-rule{
 match app-id="kitty"
 default-column-width {proportion 0.5;}
 opacity 0.85
@@ -366,8 +339,18 @@ draw-border-with-background false
 background-effect{
 blur true
 }
-
 }
+
+window-rule{
+match app-id="ghostty"
+default-column-width {proportion 0.5;}
+opacity 0.85
+draw-border-with-background false
+background-effect{
+blur true
+}
+}
+
 window-rule{
 match app-id="clash-verge"
 open-floating true
@@ -377,11 +360,11 @@ draw-border-with-background false
 background-effect{
 blur true
 }
-
 }
 
 window-rule{
-match app-id="dolphin"
+match app-id="org.gnome.Nautilus"
+//open-floating true
 default-column-width {proportion 0.5;}
 opacity 0.85
 draw-border-with-background false
@@ -391,34 +374,23 @@ blur true
 
 }
 
-
 window-rule{
 match app-id="Emacs"
 default-column-width {proportion 0.5;}
-// opacity 0.95
-// background-effect{
-// blur true
-// }
+draw-border-with-background false
+opacity 0.7
+ background-effect{
+ blur true
+ }
 
 }
 
-// 第一条规则：匹配所有有app-id的窗口（空的规则体）
 window-rule {
     match app-id=r#"."#
 }
-// 第二条规则：让剩下的窗口（app-id为空的）浮动
 window-rule {
     exclude app-id=r#"."#
     open-floating true
-}
-
-// Open the Firefox picture-in-picture player as floating by default.
-window-rule {
-// This app-id regular expression will work for both:
-// - host Firefox (app-id is "firefox")
-// - Flatpak Firefox (app-id is "org.mozilla.firefox")
-match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-open-floating true
 }
 
 // Example: block out two password managers from screen capture.
@@ -452,21 +424,18 @@ binds {
 // Most actions that you can bind here can also be invoked programmatically with
 // `niri msg action do-something`.
 
-// Mod-Shift-/, which is usually the same as Mod-?,
-// shows a list of important hotkeys.
 Mod+Shift+Slash { show-hotkey-overlay; }
 
-//My Keybindings
-Mod+N {spawn "emacsclient" "-c";}
-Mod+Alt+C {spawn "emacsclient" "-c" "~/.config/niri/config.kdl";}
-Mod+E {spawn "dolphin";}
-Mod+F1 {spawn-sh "pkill fcitx5 || fcitx5";}
-// Suggested binds for running programs: terminal, app launcher, screen locker.
-Mod+T hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty" "-e" "fish"; }
-//Mod+D hotkey-overlay-title="Run an Application" {spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle";}
-Mod+D hotkey-overlay-title="Run an Application" {spawn "vicinae" "toggle";}
+// Keybindings
+Mod+N {spawn "kitty" "--" "emacs" "-nw";}
 
-Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
+Mod+Alt+C {spawn "kitty" "--" "emacs" "-nw" "~/.config/niri/config.kdl";}
+Mod+E {spawn "nautilus";}
+Mod+T hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty" "-e" "fish"; }
+
+//Mod+D hotkey-overlay-title="Run an Application" {spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle";}
+//Mod+D hotkey-overlay-title="Run an Application" {spawn "vicinae" "toggle";}
+Mod+D { spawn "dms" "ipc" "launcher" "toggle"; }
 
 // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
 // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
@@ -499,6 +468,7 @@ XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=ba
 // You can also move the mouse into the top-left hot corner,
 // or do a four-finger swipe up on a touchpad.
 Mod+Tab repeat=false { toggle-overview; }
+Alt+Tab repeat=false { toggle-overview; }
 
 Mod+Q repeat=false { close-window; }
 
@@ -727,3 +697,5 @@ Mod+Shift+P { power-off-monitors; }
 include "dms/cursor.kdl"
 
 include "dms/windowrules.kdl"
+
+include "noctalia.kdl"
